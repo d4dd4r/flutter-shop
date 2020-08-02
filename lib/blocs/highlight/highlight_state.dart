@@ -9,8 +9,6 @@ abstract class HighlightState extends Equatable {
   List<Object> get props => [];
 }
 
-class StartHighlightList extends HighlightState {}
-
 class EmptyHighlightList extends HighlightState {}
 
 class LoadingHighlightList extends HighlightState {}

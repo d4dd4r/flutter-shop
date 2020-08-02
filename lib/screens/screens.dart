@@ -1,1 +1,2 @@
-export 'highlight.dart';
+export 'home.dart';
+export 'catalog.dart';

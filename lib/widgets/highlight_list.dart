@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:shop/models/models.dart';
+import 'package:shop/widgets/widgets.dart';
+import 'package:shop/services/services.dart';
 
 class HighlightList extends StatelessWidget {
+  static const _apiClient = const ProductsApiClient();
+
+  static const _productService = ProductService(apiClient: _apiClient);
+
   final List<Highlight> list;
 
   HighlightList({@required this.list}) : assert(list != null);
@@ -12,12 +18,12 @@ class HighlightList extends StatelessWidget {
       itemCount: list.length,
       itemBuilder: (context, index) {
         final highlight = list[index];
-        return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-          child: Text(
-            highlight.title,
-            textAlign: TextAlign.justify,
-          ),
+        return HighlightCard(
+          productService: _productService,
+          bannerUrl: highlight.bannerUrl,
+          title: highlight.title,
+          subtitle: highlight.subtitle,
+          filter: highlight.filter,
         );
       },
     );

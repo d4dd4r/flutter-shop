@@ -7,4 +7,4 @@ abstract class HighlightEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class FetchList extends HighlightEvent {}
+class HighlightFetchList extends HighlightEvent {}

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_icons/flutter_icons.dart' as icons;
@@ -23,10 +24,11 @@ class CatalogScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final favoriteBlock = BlocProvider.of<FavoriteBloc>(context);
-print('==========> [CatalogScreen] Build');
+    final productBlock = BlocProvider.of<ProductBloc>(context);
+    print('==========> [CatalogScreen] Build');
     return Scaffold(
       appBar: AppBar(
-        title: Text('Test screen'),
+        title: Text('Catalog'),
       ),
       body: Column(
         children: [
@@ -60,9 +62,27 @@ print('==========> [CatalogScreen] Build');
                 label: const Text('Фильтры'),
               ),
               _HeaderButton(
-                onPressed: () {},
                 icon: icons.MaterialCommunityIcons.sort,
                 label: const Text('Сортировка'),
+                onPressed: () => showCupertinoModalPopup(
+                    context: context,
+                    builder: (ctx) => CupertinoActionSheet(
+                        title: const Text('Сортировать каталог'),
+                        actions: ProductSort.values
+                            .map((sort) => CupertinoActionSheetAction(
+                                  child: Text(productSortTitle[sort]),
+                                  onPressed: () {
+                                    productBlock
+                                        .add(ProductChangeSort(sort: sort));
+                                    Navigator.of(ctx).pop();
+                                  },
+                                ))
+                            .toList(),
+                        cancelButton: CupertinoActionSheetAction(
+                          child: const Text('Отменить'),
+                          isDefaultAction: true,
+                          onPressed: () => Navigator.of(ctx).pop(),
+                        ))),
               ),
             ],
           ),

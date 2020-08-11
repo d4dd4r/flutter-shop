@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:flutter/foundation.dart';
 import 'package:meta/meta.dart';
 import 'package:shop/blocs/blocs.dart';
 import 'package:shop/services/services.dart';
@@ -14,10 +15,11 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
 
   @override
   Stream<ProductState> mapEventToState(ProductEvent event) async* {
-    if (event is ProductFetchList) yield* _mapFetchProductListToState(event);
+    if (event is ProductFetchList) yield* _mapProductFetchListToState(event);
+    if (event is ProductChangeSort) yield* _mapProductChangeSortToState(event);
   }
 
-  Stream<ProductState> _mapFetchProductListToState(
+  Stream<ProductState> _mapProductFetchListToState(
       ProductFetchList event) async* {
     yield LoadingProductList();
     try {
@@ -28,5 +30,17 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     } catch (error) {
       yield ErrorProductList(error: error);
     }
+  }
+
+  Stream<ProductState> _mapProductChangeSortToState(
+      ProductChangeSort event) async* {
+    yield LoadingProductList();
+    if (state is LoadedProductList == false) {
+      yield EmptyProductList();
+    }
+
+    final list = (state as LoadedProductList).list;
+    sortProductList(list, event.sort);
+    yield LoadedProductList(list: list);
   }
 }
